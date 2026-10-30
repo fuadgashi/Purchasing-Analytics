@@ -1,0 +1,145 @@
+/// Document lines, purchases and sales: one row per document line. Purchase lines carry the volumes, invoices and supplier prices; sales lines carry the sales the range measures set against purchases. Window: 1 January of the prior year onwards.
+table FactInvoiceLine
+	lineageTag: 6be66b32-11bc-40df-a12b-cc407f61632b
+
+	/// Document the line belongs to. Counts purchase invoices, and is the Invoice Number slicer.
+	column DocumentId
+		dataType: int64
+		formatString: 0
+		isAvailableInMdx: false
+		lineageTag: 94d07811-3e59-426a-958e-da866ce248d9
+		summarizeBy: none
+		sourceColumn: DocumentId
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Document type code. Joins to DimDocumentType, which carries the purchase and sales-out flags.
+	column DocumentTypeId
+		dataType: int64
+		isHidden
+		formatString: 0
+		isAvailableInMdx: false
+		lineageTag: c4f31ef0-fa78-4819-9882-7079574206fa
+		summarizeBy: none
+		sourceColumn: DocumentTypeId
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Organisational unit the line was booked in. Joins to DimOrgUnit.
+	column OrgUnitId
+		dataType: int64
+		isHidden
+		formatString: 0
+		isAvailableInMdx: false
+		lineageTag: b3e120be-3e1c-400e-b53b-245581e2eaa6
+		summarizeBy: none
+		sourceColumn: OrgUnitId
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Business partner on the document: the supplier on a purchase, the customer on a sale. Joins to DimPartner. Text, to match DimPartner[PartnerId].
+	column PartnerId
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: e487d706-d866-4e1a-a176-c16ba7db383e
+		summarizeBy: none
+		sourceColumn: PartnerId
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Document date. Joins to DimDate and drives all time intelligence.
+	column Date
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		isAvailableInMdx: false
+		lineageTag: a7a66975-a71f-4705-9046-80ba864d7fbe
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Product code. Joins to DimProduct. Text, to match DimProduct[ProductId]; change the two together.
+	column ProductId
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: adee55e3-4b97-4759-be92-a139bd9522de
+		summarizeBy: none
+		sourceColumn: ProductId
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Quantity on the line, in the product's base unit.
+	column Quantity
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: ed87f7c3-45f8-4206-993b-8e02560e1d3f
+		summarizeBy: none
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Supplier unit price without VAT, after discounts: what the supplier charged. Purchase lines only; blank on every other line. Purchase value multiplies quantity by it.
+	column SupplierPrice
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: eaac5cea-7578-4fb8-9789-f562030e2032
+		summarizeBy: none
+		sourceColumn: SupplierPrice
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Net unit price including VAT: the document price after discounts. Sales value multiplies quantity by it.
+	column NetPrice
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 96aa82d7-8481-4271-8e8c-d630c788e2d2
+		summarizeBy: none
+		sourceColumn: NetPrice
+
+		annotation SummarizationSetBy = Automatic
+	partition FactInvoiceLine = m
+		mode: import
+		queryGroup: Fact
+		source = ```
+				let
+				    // Purchase and sales document lines from 1 January of the prior year.
+				    Source =
+				        Sql.Database(
+				            pServer,
+				            pDatabase,
+				            [
+				                Query = "
+				                SELECT
+				                    l.DocumentId,
+				                    l.DocumentTypeId,
+				                    l.OrgUnitId,
+				                    CAST(l.PartnerId AS VARCHAR(20)) AS PartnerId,
+				                    CAST(l.DocumentDate AS DATE) AS [Date],
+				                    CAST(l.ProductId AS VARCHAR(20)) AS ProductId,
+				                    l.Quantity,
+				                    l.SupplierUnitPrice AS SupplierPrice,
+				                    l.NetUnitPrice AS NetPrice
+				                FROM pur.DocumentLine l
+				                -- the product's own flag decides whether its lines count
+				                INNER JOIN pur.Product p
+				                    ON p.ProductId = l.ProductId
+				                WHERE l.DocumentDate >= DATEFROMPARTS(YEAR(GETDATE()) - 1, 1, 1)
+				                  AND p.CountsTowardReporting = 1
+				                ",
+				                CommandTimeout = #duration(0, 1, 0, 0)
+				            ]
+				        ),
+				    Typed = Table.TransformColumnTypes(Source, {{"Date", type date}})
+				in
+				    Typed
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

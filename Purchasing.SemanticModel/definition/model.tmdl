@@ -1,0 +1,45 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Model
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup Fact
+
+	annotation PBI_QueryGroupOrder = 2
+
+queryGroup Dimension
+
+	annotation PBI_QueryGroupOrder = 3
+
+queryGroup Parameters
+
+	annotation PBI_QueryGroupOrder = 4
+
+annotation PBI_QueryOrder = ["FactInvoiceLine", "DimProduct", "DimPartner", "DimDivision", "DimOrgUnit", "DimDocumentType", "DimDate", "Measure", "Labels", "LabelMeasures", "pServer", "pDatabase"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DaxQueryView_Desktop","CalcGroup","TMDLView_Desktop","WebModelingEdit","DevMode","MCP-PBIModeling"]
+
+annotation __TEdtr = 1
+
+ref table FactInvoiceLine
+ref table DimProduct
+ref table DimPartner
+ref table DimDivision
+ref table DimOrgUnit
+ref table DimDocumentType
+ref table DimDate
+ref table Measure
+ref table Labels
+ref table LabelMeasures
+
+ref cultureInfo en-US

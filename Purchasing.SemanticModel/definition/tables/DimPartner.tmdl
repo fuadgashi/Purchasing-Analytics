@@ -1,0 +1,80 @@
+/// Business partners: one row per partner, supplier or customer. On every purchase page the supplier is the partner on the purchase document.
+table DimPartner
+	lineageTag: 0c5e6fd7-cdec-427a-abb6-40950b26874b
+
+	/// Partner code. Text, so its dropdown slicers offer a search box; FactInvoiceLine[PartnerId] matches it.
+	column PartnerId
+		dataType: string
+		isKey
+		isAvailableInMdx: false
+		lineageTag: 9fb8c3e7-7382-4ca7-91d1-bc3b803e6936
+		summarizeBy: none
+		sourceColumn: PartnerId
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Partner name. Sorted by PartnerSortOrder.
+	column PartnerName
+		dataType: string
+		isAvailableInMdx: false
+		lineageTag: 73bccf82-b2da-44dd-9981-971ecc8197a5
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: PartnerName
+		sortByColumn: PartnerSortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Display order of PartnerName, from the source: one position per partner name.
+	column PartnerSortOrder
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2e4bee2e-0d64-425f-b576-82c39d8746b4
+		summarizeBy: none
+		sourceColumn: PartnerSortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	/// TRUE for partners the company buys from. The Supplier slicer lists only these. A partner can be a supplier and a customer at once.
+	column IsSupplier
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		isAvailableInMdx: false
+		lineageTag: 93c94186-f60c-4df9-a906-0b7c1fa25a3a
+		summarizeBy: none
+		sourceColumn: IsSupplier
+
+		annotation SummarizationSetBy = Automatic
+	partition DimPartner = m
+		mode: import
+		queryGroup: Dimension
+		source = ```
+				let
+				    // Business partners, with the supplier flag kept in the source.
+				    Source =
+				        Sql.Database(
+				            pServer,
+				            pDatabase,
+				            [
+				                Query = "
+				                SELECT
+				                    CAST(p.PartnerId AS VARCHAR(20)) AS PartnerId,
+				                    p.PartnerName,
+				                    p.SortOrder AS PartnerSortOrder,
+				                    p.IsSupplier
+				                FROM pur.Partner p
+				                ",
+				                CommandTimeout = #duration(0, 1, 0, 0)
+				            ]
+				        ),
+				    Keyed = Table.AddKey(Source, {"PartnerId"}, true),
+				    Typed = Table.TransformColumnTypes(Keyed, {{"IsSupplier", type logical}})
+				in
+				    Typed
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

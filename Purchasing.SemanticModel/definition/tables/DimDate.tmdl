@@ -1,0 +1,334 @@
+/// The calendar: one row per day of the prior and the current year, marked as the date table. Working Day holds the working-day rule.
+table DimDate
+	lineageTag: 80236ee1-eb97-4f13-9560-4c41bb45d637
+	dataCategory: Time
+
+	/// Calendar year.
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 4bd3cc18-2b96-47a8-9d31-a59c3cc8a222
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = User
+
+	/// Month number, 1-12. Sorts the month name.
+	column Month
+		dataType: int64
+		formatString: 0
+		lineageTag: 368140f4-7f51-4194-94ea-21e388cb674d
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = User
+
+	/// The date. This is the marked date column and the key every fact joins to.
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd/mm
+		lineageTag: 8ccc9e71-71e7-4133-96a4-eac722494bb6
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Quarter number, 1-4. Sorts the quarter name.
+	column Quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: c3e20743-93d9-4693-afcf-476aa59b1781
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = User
+
+	/// Week of year, Monday start; week 1 is the week holding 1 January. Sorts the week name.
+	column Week
+		dataType: int64
+		formatString: 0
+		lineageTag: 8eac791b-40f5-4e09-b739-263cdec460eb
+		summarizeBy: none
+		sourceColumn: Week
+
+		annotation SummarizationSetBy = User
+
+	/// Day of month, 1-31.
+	column DayMonth
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a7f4aa7-e61d-492b-bde4-e879be7f6bde
+		summarizeBy: none
+		sourceColumn: DayMonth
+
+		annotation SummarizationSetBy = User
+
+	/// Month label, "Jan"-"Dec" (en-US).
+	column 'Month Name'
+		dataType: string
+		lineageTag: 15b42218-1bc6-48f0-bf5c-730892bb18cd
+		summarizeBy: none
+		sourceColumn: Month Name
+		sortByColumn: Month
+
+		annotation SummarizationSetBy = User
+
+	/// Running count of working days (Monday to Saturday) within the month, up to this date.
+	column 'Month Working Day'
+		dataType: int64
+		formatString: 0
+		lineageTag: a775754d-b410-42fa-9067-5ea0fa6d7684
+		summarizeBy: none
+		sourceColumn: Month Working Day
+
+		annotation SummarizationSetBy = User
+
+	/// Total working days (Monday to Saturday) in the calendar year.
+	column 'Working Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: d8261afe-3307-4998-9682-d3de2483b7f1
+		summarizeBy: none
+		sourceColumn: Working Days
+
+		annotation SummarizationSetBy = User
+
+	/// Day of year, 1-366.
+	column 'Day Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 710406cd-ad39-45b3-9fe0-a9cc53a4d71d
+		summarizeBy: none
+		sourceColumn: Day Year
+
+		annotation SummarizationSetBy = User
+
+	/// Week of month, Monday start.
+	column 'Week Month'
+		dataType: int64
+		formatString: 0
+		lineageTag: deef0b9d-1239-438c-b3e9-56f1c52bbdfc
+		summarizeBy: none
+		sourceColumn: Week Month
+
+		annotation SummarizationSetBy = User
+
+	/// Two-letter day initial, "Mo"-"Su".
+	column 'Day Initial'
+		dataType: string
+		lineageTag: fb5a099d-7b18-4a06-817a-4795b77f888a
+		summarizeBy: none
+		sourceColumn: Day Initial
+		sortByColumn: 'Day Week'
+
+		annotation SummarizationSetBy = User
+
+	/// Day of week, 1 (Mon) to 7 (Sun). Sorts the day columns.
+	column 'Day Week'
+		dataType: int64
+		formatString: 0
+		lineageTag: e1ab3f58-b2de-4ef2-b275-a33136ed5da3
+		summarizeBy: none
+		sourceColumn: Day Week
+
+		annotation SummarizationSetBy = User
+
+	/// Day label, "Mon"-"Sun" (en-US).
+	column Day
+		dataType: string
+		lineageTag: 530cbcc3-29f5-4263-8b19-68eeb90429a5
+		summarizeBy: none
+		sourceColumn: Day
+		sortByColumn: 'Day Week'
+
+		annotation SummarizationSetBy = User
+
+	/// Month and year display label, "MM/YYYY".
+	column 'Month Year'
+		dataType: string
+		lineageTag: 06d238a9-74a1-4a9b-80b7-ccd3e57b74c0
+		summarizeBy: none
+		sourceColumn: Month Year
+		sortByColumn: YearMonthKey
+
+		annotation SummarizationSetBy = User
+
+	/// Week label, "Week 1".
+	column 'Week Name'
+		dataType: string
+		lineageTag: 86090300-0a80-4601-8a12-596271d6c6ee
+		summarizeBy: none
+		sourceColumn: Week Name
+		sortByColumn: Week
+
+		annotation SummarizationSetBy = User
+
+	/// Quarter label, "Q1"-"Q4".
+	column 'Quarter Name'
+		dataType: string
+		lineageTag: c84f8c16-8c9b-468c-bec1-c491d32275fa
+		summarizeBy: none
+		sourceColumn: Quarter Name
+		sortByColumn: Quarter
+
+		annotation SummarizationSetBy = User
+
+	/// Sort key for Month Year, YYYYMM. Hidden.
+	column YearMonthKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b7f0d67b-4db7-4ef3-b14b-61d15436e6e4
+		summarizeBy: none
+		sourceColumn: YearMonthKey
+
+		annotation SummarizationSetBy = User
+
+	/// 1 on a working day (Monday to Saturday), 0 on Sunday. The working-day rule lives in the DimDate query; count working days as the SUM of this column.
+	column 'Working Day'
+		dataType: int64
+		formatString: 0
+		lineageTag: a715053d-153c-4a38-b80f-344fdea90e92
+		summarizeBy: none
+		sourceColumn: Working Day
+
+		annotation SummarizationSetBy = User
+
+	/// Running count of working days from the first calendar date to this date. Working days between two dates = index(end) - index(start) + Working Day(start). Lets AvgDay count days per product without scanning the calendar.
+	column 'Working Day Index'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9c254c58-6eca-4b95-b64d-6c394ee53a45
+		summarizeBy: none
+		sourceColumn: Working Day Index
+
+		annotation SummarizationSetBy = User
+
+	/// Monday of the week the date falls in: one value per calendar week, also across New Year, where Week restarts at 1. AvgWeek counts weeks with it. Hidden.
+	column 'Week Start'
+		dataType: dateTime
+		isHidden
+		formatString: dd/mm
+		lineageTag: f3adca4e-bbed-47e7-b943-e4e6c87a1497
+		summarizeBy: none
+		sourceColumn: Week Start
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	hierarchy 'Date Hierarchy'
+		lineageTag: be1d9e11-1a0d-47c7-9574-0cb7693141f5
+
+		level Quarter
+			lineageTag: 70710fa8-0b4e-46f7-8a69-b2fd98594980
+			column: Quarter
+
+		level Month
+			lineageTag: 56884447-f273-4ef7-844c-7adf983c44e8
+			column: Month
+
+		level Week
+			lineageTag: 4cfa6a43-de98-4fa6-ab9f-c896aa5d4ffd
+			column: Week
+
+		level Date
+			lineageTag: 3d65d0f3-2a06-4263-9828-1490940e67a2
+			column: Date
+
+	partition DimDate = m
+		mode: import
+		queryGroup: Model
+		source =
+				let
+				    // The calendar: one row per day, calendar year only.
+				    // The range is the fact window restated - 1 January of the prior year to the end of the
+				    // current year - not read from a fact table: a calendar derived from a fact query depends on
+				    // that query and goes short with no error when it returns nothing. If the fact window
+				    // changes, change it here too.
+				    CurrentYear = Date.Year(DateTime.LocalNow()),
+				    StartDate = #date(CurrentYear - 1, 1, 1),
+				    EndDate = #date(CurrentYear, 12, 31),
+				    NumberOfDays = Duration.Days(EndDate - StartDate) + 1,
+				    Calendar = List.Dates(StartDate, NumberOfDays, #duration(1, 0, 0, 0)),
+				    TableFromList = Table.FromList(Calendar, Splitter.SplitByNothing(), {"Date"}),
+				
+				    // -- Calendar columns -------------------------------------------------
+				    // Culture is explicit on every name-producing call: without it these
+				    // return the names of whichever machine refreshes, so the same file
+				    // would yield different values on different desks.
+				    Year = Table.AddColumn(TableFromList, "Year", each Date.Year([Date]), Int64.Type),
+				    Quarter = Table.AddColumn(Year, "Quarter", each Date.QuarterOfYear([Date]), Int64.Type),
+				    Month = Table.AddColumn(Quarter, "Month", each Date.Month([Date]), Int64.Type),
+				    Week = Table.AddColumn(Month, "Week", each Date.WeekOfYear([Date], Day.Monday), Int64.Type),
+				    DayMonth = Table.AddColumn(Week, "DayMonth", each Date.Day([Date]), Int64.Type),
+				    QuarterName = Table.AddColumn(DayMonth, "Quarter Name", each "Q" & Text.From(Date.QuarterOfYear([Date])), type text),
+				    MonthName = Table.AddColumn(QuarterName, "Month Name", each Text.Start(Date.MonthName([Date], "en-US"), 3), type text),
+				    WeekName = Table.AddColumn(MonthName, "Week Name", each "Week " & Text.From([Week]), type text),
+				    DayCol = Table.AddColumn(WeekName, "Day", each Text.Start(Date.DayOfWeekName([Date], "en-US"), 3), type text),
+				    WeekMonth = Table.AddColumn(DayCol, "Week Month", each Date.WeekOfMonth([Date], Day.Monday), Int64.Type),
+				    DayWeek = Table.AddColumn(WeekMonth, "Day Week", each Date.DayOfWeek([Date], Day.Monday) + 1, Int64.Type),
+				    DayYear = Table.AddColumn(DayWeek, "Day Year", each Date.DayOfYear([Date]), Int64.Type),
+				    MonthYear = Table.AddColumn(DayYear, "Month Year", each Text.PadStart(Text.From(Date.Month([Date])), 2, "0") & "/" & Text.From(Date.Year([Date])), type text),
+				    YearMonthKey = Table.AddColumn(MonthYear, "YearMonthKey", each Date.Year([Date]) * 100 + Date.Month([Date]), Int64.Type),
+				    // Monday of the week: one key per calendar week, across New Year too (Week restarts at 1).
+				    WeekStart = Table.AddColumn(YearMonthKey, "Week Start", each Date.StartOfWeek([Date], Day.Monday), type date),
+				
+				    // Derived from the Day Week number rather than the Day text, so it does
+				    // not break if the day label ever changes length or culture.
+				    DayInitial = Table.AddColumn(WeekStart, "Day Initial", each
+				        let n = Date.DayOfWeek([Date], Day.Monday) + 1
+				        in if n = 1 then "Mo" else if n = 2 then "Tu" else if n = 3 then "We"
+				           else if n = 4 then "Th" else if n = 5 then "Fr" else if n = 6 then "Sa"
+				           else "Su", type text),
+				
+				    // -- Working days ------------------------------------------------------
+				    // The working week, defined once: every working-day count in the model reads the
+				    // columns built from it.
+				    WorkingWeekdays = {Day.Monday, Day.Tuesday, Day.Wednesday, Day.Thursday, Day.Friday, Day.Saturday},
+				    IsWorkingDay = (d as date) as logical => List.Contains(WorkingWeekdays, Date.DayOfWeek(d, Day.Sunday)),
+				    WorkingDay = Table.AddColumn(DayInitial, "Working Day", each if IsWorkingDay([Date]) then 1 else 0, Int64.Type),
+				    MonthWorkingDay = Table.AddColumn(WorkingDay, "Month Working Day", each List.Count(
+				        List.Select(
+				            List.Dates(
+				                #date(Date.Year([Date]), Date.Month([Date]), 1),
+				                Duration.Days([Date] - #date(Date.Year([Date]), Date.Month([Date]), 1)) + 1,
+				                #duration(1, 0, 0, 0)
+				            ),
+				            each IsWorkingDay(_)
+				        )
+				    ), Int64.Type),
+				    WorkingDays = Table.AddColumn(MonthWorkingDay, "Working Days", each let
+				            YearStart = #date(Date.Year([Date]), 1, 1),
+				            YearEnd = #date(Date.Year([Date]), 12, 31),
+				            YearDays = List.Dates(YearStart, Duration.Days(YearEnd - YearStart) + 1, #duration(1, 0, 0, 0)),
+				            WorkingDaysInYear = List.Select(YearDays, IsWorkingDay)
+				        in
+				            List.Count(WorkingDaysInYear), Int64.Type),
+				
+				    // Running count of working days since the calendar starts (same rule). The working days
+				    // between two dates are index(end) - index(start) + Working Day(start): a lookup, not a
+				    // scan of the calendar, so a per-product day count stays fast.
+				    Flags = List.Buffer(List.Transform(Calendar, each if IsWorkingDay(_) then 1 else 0)),
+				    RunningIndex = List.Buffer(List.Generate(
+				        () => [i = 0, s = Flags{0}],
+				        each [i] < List.Count(Flags),
+				        each [i = [i] + 1, s = [s] + Flags{[i] + 1}],
+				        each [s]
+				    )),
+				    RowPos = Table.AddIndexColumn(WorkingDays, "RowPos", 0, 1, Int64.Type),
+				    WorkingDayIndex = Table.RemoveColumns(
+				        Table.AddColumn(RowPos, "Working Day Index", each RunningIndex{[RowPos]}, Int64.Type),
+				        {"RowPos"}
+				    ),
+				    ChangeType = Table.TransformColumnTypes(WorkingDayIndex, {{"Date", type date}})
+				in
+				    ChangeType
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,160 @@
+/// Average per working day of the measure passed in, over the window that measure covers (YearToDay, a prior-year view...), ending on the latest date in context and never past today. Product row (one product in context): the days start on that product's first sale (sales-out document) in the window, company-wide so slicers do not move it - a new product is not spread over months it was not sold. Any other row (company, customer, brand): the days are the working days of the window, from the company's first sale, so the rows add up to the company. Working days come from the calendar (DimDate[Working Day], DimDate[Working Day Index]); the rule lives in the DimDate query. Additive measures only - not payments, distinct counts or ratios.
+function AvgDay =
+		(cal_funct: anyref expr) =>
+				VAR _end = MIN( TODAY(), MAX( DimDate[Date] ) )
+				-- Where the measure's window starts (first day with a value, company-wide): first the month,
+				-- then the day inside it - a few dozen checks instead of one per day, several times faster
+				-- than searching day by day, with the same dates.
+				VAR _first_month = CALCULATE( MINX( FILTER( VALUES( DimDate[YearMonthKey] ), NOT ISBLANK( CALCULATE( cal_funct ) ) ), DimDate[YearMonthKey] ), ALL(), DimDate[Date] <= _end )
+				VAR _company_start = CALCULATE( FIRSTNONBLANK( DimDate[Date], CALCULATE( cal_funct ) ), ALL(), DimDate[YearMonthKey] = _first_month, DimDate[Date] <= _end )
+				VAR _total = CALCULATE( cal_funct, KEEPFILTERS( DimDate[Date] <= _end ) )
+				RETURN
+					IF(
+						NOT ISBLANK( _total ),
+						IF(
+							HASONEVALUE( DimProduct[ProductId] ),
+							-- Product row: from the product's first sale (never before the window or the dates shown)
+							-- The product's first sale (sales-out document) in the window, company-wide. Read from the
+							-- documents in one step: searching the first date day by day per product is several times
+							-- slower, with the same values.
+							VAR _product_start = CALCULATE( MIN( FactInvoiceLine[Date] ), ALL(), VALUES( DimProduct[ProductId] ), DimDocumentType[IsSalesOut] = TRUE, DimDate[Date] >= _company_start, DimDate[Date] <= _end )
+							VAR _start = MAX( MAX( _company_start, MIN( DimDate[Date] ) ), _product_start )
+							VAR _days =
+								LOOKUPVALUE( DimDate[Working Day Index], DimDate[Date], _end )
+								- LOOKUPVALUE( DimDate[Working Day Index], DimDate[Date], _start )
+								+ LOOKUPVALUE( DimDate[Working Day], DimDate[Date], _start )
+							RETURN DIVIDE( _total, _days ),
+							-- Any other row: the working days of the window, so the rows add up to the company
+							DIVIDE(
+								_total,
+								CALCULATE( SUM( DimDate[Working Day] ), KEEPFILTERS( DimDate[Date] >= _company_start && DimDate[Date] <= _end ) )
+							)
+						)
+					)
+	lineageTag: 5d50dfb2-d699-4c0a-b5d2-a47f81bccf27
+
+/// Constant average per working day: AvgDay over the whole calendar (REMOVEFILTERS on DimDate), so the date selection does not change it. Additive measures only.
+function AvgDayConst =
+		(cal_funct: anyref expr) =>
+				CALCULATE( AvgDay( cal_funct ), REMOVEFILTERS( DimDate ) )
+	lineageTag: 6624fda3-f22e-48ac-98be-2aaa48fd4b10
+
+/// Prior year: shifts the measure back one year using DATEADD and restricts to the prior calendar year. Used for year-over-year comparisons.
+function PrevYear =
+		(cal_funct: anyref expr) =>
+				CALCULATE(
+					cal_funct,
+					DATEADD(
+						DimDate[Date],
+						-1,
+						YEAR
+					),
+					DimDate[Year] = YEAR(TODAY()) - 1
+				)
+	lineageTag: 978a0fb6-723c-4e2d-8807-26aaf043c093
+
+/// Theme sentiment color name ("good"/"bad"/"neutral") for CurrentValue's position relative to Center. Center is the neutral point: 0 for a difference, 1 for a ratio - passing the wrong center silently marks every decline as "good" on a ratio. Feeds Field-value conditional formatting so RAG colors follow theme switches instead of frozen hex. Blank-safe.
+function RagColor =
+		(CurrentValue: decimal val, Center: decimal val) =>
+				SWITCH(
+					TRUE(),
+					ISBLANK(CurrentValue), BLANK(),
+					CurrentValue > Center, "good",
+					CurrentValue < Center, "bad",
+					"neutral"
+				)
+	lineageTag: 4f00aeb1-533a-44d0-9f46-8c71792cb07f
+
+/// Year-to-date up to today: evaluates the measure for the date slicers' window within the current calendar year, cut at today (1 January to today when no slicer is set). KEEPFILTERS keeps the slicers' selection instead of replacing it.
+function YearToDay =
+		(cal_funct: anyref expr) =>
+				CALCULATE(
+					cal_funct,
+					KEEPFILTERS(DimDate[Year] = YEAR(TODAY())),
+					KEEPFILTERS(DimDate[Date] <= TODAY())
+				)
+	lineageTag: 1c304d65-728c-4366-ba3b-3c9887d47b35
+
+/// Dynamic format string for an amount in compact form: whole units below 1,000, then K, M and B with three significant digits. Signed adds a plus sign to positive values. Returns a literal format string, so the measure stays numeric.
+function NumberFormat =
+		(Amount: decimal val, Signed: boolean val) =>
+				VAR _abs = ABS(Amount)
+				-- outer SWITCH picks the unit, inner one the band; band edges sit where three-digit
+				-- rounding carries over (9,995 -> 10.0K); the last line of each unit is the step-up (999.6 -> 1.0K)
+				VAR _text =
+					SWITCH(
+						TRUE(),
+						_abs < 999.5, FORMAT(ROUND(_abs, 0), "#,0"),                     -- 0 - 999
+						_abs < 999.5E3,
+							SWITCH(
+								TRUE(),
+								_abs >= 99950, FORMAT(ROUND(_abs, -3) / 1E3, "#,0"),     -- 100K - 999K
+								_abs >= 9995,  FORMAT(ROUND(_abs, -2) / 1E3, "0.0"),     -- 10.0K - 99.9K
+								_abs >= 1E3,   FORMAT(ROUND(_abs, -1) / 1E3, "0.00"),    -- 1.00K - 9.99K
+								FORMAT(1, "0.0")                                          -- 1.0K (FORMAT keeps the culture's decimal mark)
+							) & "K",
+						_abs < 999.5E6,
+							SWITCH(
+								TRUE(),
+								_abs >= 99.95E6, FORMAT(ROUND(_abs, -6) / 1E6, "#,0"),
+								_abs >= 9.995E6, FORMAT(ROUND(_abs, -5) / 1E6, "0.0"),
+								_abs >= 1E6,     FORMAT(ROUND(_abs, -4) / 1E6, "0.00"),
+								FORMAT(1, "0.0")
+							) & "M",
+						SWITCH(
+							TRUE(),
+							_abs >= 99.95E9, FORMAT(ROUND(_abs, -9) / 1E9, "#,0"),           -- 100B and up: whole billions
+							_abs >= 9.995E9, FORMAT(ROUND(_abs, -8) / 1E9, "0.0"),
+							_abs >= 1E9,     FORMAT(ROUND(_abs, -7) / 1E9, "0.00"),
+							FORMAT(1, "0.0")
+						) & "B"
+					)
+				-- opening quote plus sign; anything between -0.5 and 0.5 rounds to 0 and gets no sign
+				VAR _literal = IF(Amount <= -0.5, """-", IF(Signed && Amount >= 0.5, """+", """")) & _text & """"
+				RETURN
+					SUBSTITUTE("#;#;#", "#", _literal)                                    -- same literal for positive;negative;zero
+	lineageTag: f0824076-37a3-4842-a482-9909031433b4
+
+/// Percentage difference (current - prior) / prior for a measure whose prior value is normally positive. Blank when both are blank, or the current value is blank on a future date; 1 when the current value exists but the prior is blank on a past date, or the prior is negative.
+function IndexDif =
+		(CurrentValue: decimal val, PriorValue: decimal val) =>
+				VAR _is_actual_blank = ISBLANK(CurrentValue)
+				VAR _is_prior_blank = ISBLANK(PriorValue)
+				VAR _is_future_date = MAX(DimDate[Date]) > TODAY()
+				VAR _is_past_date = MAX(DimDate[Date]) < TODAY()
+				RETURN
+					SWITCH(
+						TRUE(),
+						_is_actual_blank && _is_prior_blank, BLANK(),
+						_is_actual_blank && _is_future_date && NOT (_is_prior_blank), BLANK(),
+						NOT (_is_actual_blank) && _is_prior_blank && _is_past_date, 1,
+						NOT (_is_actual_blank) && PriorValue < 0, 1,
+						DIVIDE(
+							CurrentValue - PriorValue,
+							PriorValue
+						)
+					)
+	lineageTag: 620879e3-5612-4ea5-8be9-22f05494f473
+
+/// Dynamic format string for an index: a down arrow below Center, an up arrow at or above it, then the value as a percentage with one decimal.
+function IndexFormat =
+		(Amount: double val, Center: double val) =>
+				VAR _arrow = IF(Amount < Center, UNICHAR(9660), UNICHAR(9650))    -- ▼ / ▲
+				VAR _format_string = _arrow & " #,0.0%"
+				RETURN
+					_format_string & ";" & _format_string
+	lineageTag: 0c75f589-542b-44f6-aab3-60cb1c48f163
+
+/// One UI text from Labels, in the viewer's culture (User Culture): the row for this label type, owner type and owner number. Every label measure is a call to it. A missing row shows a warning glyph, never a quiet fallback.
+function LabelText =
+		(LabelType: string val, OwnerType: string val, OwnerNumber: int64 val) =>
+				VAR _culture = [User Culture]
+				RETURN
+					CALCULATE(
+						SELECTEDVALUE( Labels[Label], "⚠" ),
+						Labels[LabelType] = LabelType,
+						Labels[OwnerType] = OwnerType,
+						Labels[OwnerNumber] = OwnerNumber,
+						Labels[Culture] = _culture
+					)
+	lineageTag: 61e797fd-50b7-4540-9f48-16c5d2042434

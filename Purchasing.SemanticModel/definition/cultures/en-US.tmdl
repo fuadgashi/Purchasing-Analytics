@@ -1,0 +1,161 @@
+cultureInfo en-US
+	translations
+		model Model
+			table DimDate
+				column Date
+					caption: Date
+				column Day
+					caption: Day
+				column 'Day Initial'
+					caption: Day Initial
+				column 'Day Week'
+					caption: Weekday No
+				column 'Day Year'
+					caption: Day of Year
+				column DayMonth
+					caption: Date
+				column Month
+					caption: Month
+				column 'Month Name'
+					caption: Month
+				column 'Month Working Day'
+					caption: Day
+				column 'Month Year'
+					caption: Month/Year
+				column Quarter
+					caption: Quarter
+				column Week
+					caption: Week
+				column 'Week Month'
+					caption: Week of Month
+				column 'Week Name'
+					caption: Week (Text)
+				column 'Working Days'
+					caption: Working Days
+				column Year
+					caption: Year
+			table DimDivision
+				column DivisionId
+					caption: Code
+				column DivisionName
+					caption: Division
+			table DimDocumentType
+				column DocumentTypeId
+					caption: Code
+				column DocumentTypeName
+					caption: Document Type
+				column IsPurchase
+					caption: Purchase
+				column IsSalesOut
+					caption: Sales Out
+			table DimOrgUnit
+				column OrgUnitId
+					caption: Code
+				column OrgUnitName
+					caption: Unit
+			table DimPartner
+				column IsSupplier
+					caption: Supplier Flag
+				column PartnerId
+					caption: Code
+				column PartnerName
+					caption: Supplier
+			table DimProduct
+				column Brand
+					caption: Brand
+				column BrandId
+					caption: Brand Code
+				column DivisionId
+					caption: Division Code
+				column IsGoods
+					caption: Goods
+				column ProductId
+					caption: Code
+				column ProductName
+					caption: Product
+			table FactInvoiceLine
+				column Date
+					caption: Date
+				column DocumentId
+					caption: Document
+			table Measure
+				measure 'Index Purchases Invoices Count Actual/Prior YTD'
+					caption: Ind Prior Year
+				measure 'Index Purchases Invoices Count Monthly Average Actual/Prior'
+					caption: Ind Prior Year
+				measure 'Index Purchases Products Count Actual/Prior YTD'
+					caption: Index
+				measure 'Index Purchases Quantity Actual/Prior'
+					caption: Ind Prior Year
+				measure 'Index Purchases Quantity Actual/Prior YTD'
+					caption: Ind Prior Year
+				measure 'Index Purchases Quantity Monthly Average Actual/Prior'
+					caption: Ind Prior Year
+				measure 'Index Purchases Value Actual/Prior'
+					caption: Ind Prior Year
+				measure 'Index Purchases Value Actual/Prior YTD'
+					caption: Ind Prior Year
+				measure 'Index Purchases Value Monthly Average Actual/Prior'
+					caption: Ind Prior Year
+				measure 'Purchases Dropped Product Avg Value'
+					caption: Avg per SKU
+				measure 'Purchases Dropped Product Sales Share'
+					caption: Sales share
+				measure 'Purchases Dropped Product Value'
+					caption: Dropped SKU Value
+				measure 'Purchases Dropped Products Count'
+					caption: Dropped SKUs
+				measure 'Purchases Invoices Count'
+					caption: Invoices
+				measure 'Purchases Invoices Count Actual Year'
+					caption: Purchase Invoices Current Year
+				measure 'Purchases Invoices Count Actual Year Monthly Average'
+					caption: Avg Month
+				measure 'Purchases Invoices Count Prior Year'
+					caption: Prior Year
+				measure 'Purchases Invoices Count Prior Year YTD'
+					caption: Prior Year TD
+				measure 'Purchases New Product Avg Value'
+					caption: Avg per SKU
+				measure 'Purchases New Product Sales Share'
+					caption: Sales share
+				measure 'Purchases New Product Value'
+					caption: New SKU Value
+				measure 'Purchases New Products Count'
+					caption: New SKUs
+				measure 'Purchases Products Count'
+					caption: Prod / Inv
+				measure 'Purchases Products Count Actual Year'
+					caption: Current Year
+				measure 'Purchases Products Count Prior Year'
+					caption: Prior Year
+				measure 'Purchases Products Count Prior Year YTD'
+					caption: Prior Year TD
+				measure 'Purchases Quantity'
+					caption: Purchase Quantity
+				measure 'Purchases Quantity Actual Year'
+					caption: Purchase Quantity Current Year
+				measure 'Purchases Quantity Actual Year Monthly Average'
+					caption: Avg Month
+				measure 'Purchases Quantity Prior Year'
+					caption: Prior Year
+				measure 'Purchases Quantity Prior Year YTD'
+					caption: Prior Year TD
+				measure 'Purchases Value'
+					caption: Purchase Value
+				measure 'Purchases Value Actual Year'
+					caption: Purchase Value Current Year
+				measure 'Purchases Value Actual Year Monthly Average'
+					caption: Avg Month
+				measure 'Purchases Value Actual Year Share'
+					caption: Share
+				measure 'Purchases Value Prior Year'
+					caption: Prior Year
+				measure 'Purchases Value Prior Year YTD'
+					caption: Prior Year TD
+				measure 'Sales Net Price'
+					caption: Sales
+				measure 'Sales Net Price Actual Year'
+					caption: Sales Current Year
+				measure 'Variance Purchases Products Count New/Dropped'
+					caption: Net change

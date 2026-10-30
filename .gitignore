@@ -1,0 +1,12 @@
+# Power BI Desktop local state - never shared.
+# cache.abf holds the model *with its data*: committing it would put source data into
+# git history. Globbed with **/ because .pbi/ sits under each item folder.
+**/.pbi/cache.abf
+**/.pbi/localSettings.json
+
+# Desktop's TMDL view scratch pad: an editor buffer, not model definition. It goes stale
+# the moment the model changes, and applying a stale copy overwrites live objects.
+**/TMDLScripts/
+
+# Python compiled cache
+__pycache__/

@@ -1,0 +1,23 @@
+relationship 47661f4a-c477-4e15-80a0-ac1183498059
+	fromColumn: FactInvoiceLine.DocumentTypeId
+	toColumn: DimDocumentType.DocumentTypeId
+
+relationship 1ca2de40-1b3f-4c40-be54-80c30d950485
+	fromColumn: FactInvoiceLine.ProductId
+	toColumn: DimProduct.ProductId
+
+relationship 559d91aa-f836-438e-bfea-c0ee7e09efe7
+	fromColumn: FactInvoiceLine.PartnerId
+	toColumn: DimPartner.PartnerId
+
+relationship 3d764065-d44a-468b-bbc5-703880c54f04
+	fromColumn: FactInvoiceLine.Date
+	toColumn: DimDate.Date
+
+relationship a4079fa2-48f5-41c5-ae94-ba3a13b8330a
+	fromColumn: FactInvoiceLine.OrgUnitId
+	toColumn: DimOrgUnit.OrgUnitId
+
+relationship bc1a4a2c-aa4b-4ab9-9663-0bc782f2cd79
+	fromColumn: DimProduct.DivisionId
+	toColumn: DimDivision.DivisionId

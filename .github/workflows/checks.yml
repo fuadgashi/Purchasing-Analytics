@@ -1,0 +1,33 @@
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Docs
+        run: python -W error scripts/docs_check.py
+      - name: Model and report
+        if: success() || failure()
+        run: python -W error scripts/model_check.py
+      - name: Colour measures match their indexes
+        if: success() || failure()
+        run: python -W error scripts/rag_colors.py --check
+      - name: DAX audit
+        if: success() || failure()
+        run: python -W error scripts/dax_audit.py --strict
+      - name: Phone layout
+        if: success() || failure()
+        run: python -W error scripts/mobile_check.py --strict

@@ -1,0 +1,144 @@
+/// Every user-facing string of the report: one row per owner, label type and culture. Plain data; the label measures read it.
+table Labels
+	lineageTag: 7bff9dfd-97df-4377-9531-e8a064f5fba5
+
+	/// What the label belongs to - a page, a section, a visual or a slicer.
+	column OwnerType
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 157f8ecf-369f-4d88-a8ec-af338f910353
+		summarizeBy: none
+		sourceColumn: OwnerType
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Sequential number within the owner type. Never shared across types.
+	column OwnerNumber
+		dataType: int64
+		isHidden
+		formatString: 0
+		isAvailableInMdx: false
+		lineageTag: 953d059c-ec08-4173-bd9a-ac61a24472a3
+		summarizeBy: none
+		sourceColumn: OwnerNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Human-readable name of the thing the label belongs to.
+	column OwnerName
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: a6f9f065-3902-4194-a4fe-c7074a74dcea
+		summarizeBy: none
+		sourceColumn: OwnerName
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Which slot on the owner this text fills, such as a title or a subtitle.
+	column LabelType
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: a3912e4e-3612-4bbf-bc28-bf726a719cda
+		summarizeBy: none
+		sourceColumn: LabelType
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Language this row's text is written in.
+	column Culture
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 65ff9f38-d3b4-4eee-b86d-6e95dd19b547
+		summarizeBy: none
+		sourceColumn: Culture
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The text shown to the user. All report text lives here, never in DAX.
+	column Label
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 07bb417b-7e60-4c09-8307-072af188df40
+		summarizeBy: none
+		sourceColumn: Label
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Labels = m
+		mode: import
+		queryGroup: Model
+		source =
+				let
+				    // Every user-facing string of the report, one row per OwnerType + OwnerNumber + LabelType + Culture.
+				    // Text lives here, never in DAX: the measures in LabelMeasures are lookups against it.
+				    Source = #table(
+				        type table [OwnerType = text, OwnerNumber = Int64.Type, OwnerName = text, Culture = text, LabelType = text, Label = text],
+				        {
+				        {"Page", 1, "PageNav1", "en-US", "Navigator Title", "Supply"},
+				        {"Page", 1, "Page 1", "en-US", "Subtitle", "Purchases over time"},
+				        {"Page", 1, "Page 1", "en-US", "Title", "Purchases & Invoices"},
+				        {"Page", 2, "PageNav2", "en-US", "Navigator Title", "Purchase"},
+				        {"Page", 2, "Page 2", "en-US", "Subtitle", "Purchases by product and by supplier"},
+				        {"Page", 2, "Page 2", "en-US", "Title", "Purchases Performance"},
+				        {"Page", 3, "PageNav3", "en-US", "Navigator Title", "Assortment"},
+				        {"Page", 3, "Page 3", "en-US", "Subtitle", "New and dropped SKUs by brand"},
+				        {"Page", 3, "Page 3", "en-US", "Title", "Assortment Movement"},
+				        {"Slicer", 5, "Date", "en-US", "SlicerTitle", "Date Range"},
+				        {"Slicer", 6, "Division/Product", "en-US", "SlicerTitle", "Division / Product"},
+				        {"Slicer", 7, "Invoice Number", "en-US", "SlicerTitle", "Invoice Number"},
+				        {"Slicer", 8, "Organisation/Warehouse", "en-US", "SlicerTitle", "Org / Depot"},
+				        {"Slicer", 9, "Supplier", "en-US", "SlicerTitle", "Supplier"},
+				        {"Visual", 10, "Alt Assortment Cards", "en-US", "VisualSubtitle", "Cards: SKUs bought, new and dropped, the net change, the rate of change and the net value."},
+				        {"Visual", 11, "Alt Assortment SKU Movement", "en-US", "VisualSubtitle", "Matrix by brand and product: SKUs this year and last year, new, dropped and their values."},
+				        {"Visual", 12, "Alt Assortment SKU Value", "en-US", "VisualSubtitle", "Bar chart: the value of new SKUs against the value of dropped SKUs, by brand."},
+				        {"Visual", 13, "Alt Purchase Purchase Quantity", "en-US", "VisualSubtitle", "Table: purchase quantity by product, this year against last year."},
+				        {"Visual", 14, "Alt Purchase Purchase Value", "en-US", "VisualSubtitle", "Table: purchase value by product, this year against last year."},
+				        {"Visual", 15, "Alt Purchase Purchase Value Column and line chart", "en-US", "VisualSubtitle", "Column and line chart: purchase value by brand, this year against last year."},
+				        {"Visual", 16, "Alt Purchase Supplier Share", "en-US", "VisualSubtitle", "Bar chart: each supplier's share of purchase value this year."},
+				        {"Visual", 17, "Alt Supply Cards", "en-US", "VisualSubtitle", "KPI cards: purchase value, quantity and invoices this year, against the monthly average and last year to date."},
+				        {"Visual", 18, "Alt Supply Invoices Received", "en-US", "VisualSubtitle", "Table of purchases: product, brand, division, date, document, quantity and value."},
+				        {"Visual", 19, "Alt Supply Invoices by Month", "en-US", "VisualSubtitle", "Combo chart: Purchase invoices, prior year and current year, by month"},
+				        {"Visual", 20, "Alt Supply Quantity by Month", "en-US", "VisualSubtitle", "Combo chart: Purchase quantity, prior year and current year, by month"},
+				        {"Visual", 21, "Alt Supply Value by Month", "en-US", "VisualSubtitle", "Combo chart: Purchase value, prior year and current year, by month"},
+				        {"Visual", 22, "Average per SKU", "en-US", "MeasureLabel", "Avg per SKU"},
+				        {"Visual", 23, "Brand Product Quantity", "en-US", "VisualSubtitle", "By brand / product in quantity"},
+				        {"Visual", 24, "Brand Product Value", "en-US", "VisualSubtitle", "By brand / product"},
+				        {"Visual", 25, "Index", "en-US", "MeasureLabel", "Index"},
+				        {"Visual", 26, "Invoice Detail", "en-US", "VisualSubtitle", "Invoice Details"},
+				        {"Visual", 27, "Invoices Count", "en-US", "MeasureLabel", "Invoices"},
+				        {"Visual", 28, "Monthly Average", "en-US", "MeasureLabel", "Avg Month"},
+				        {"Visual", 29, "Net Change", "en-US", "MeasureLabel", "Net change"},
+				        {"Visual", 30, "Prior Year To Date", "en-US", "MeasureLabel", "Prior Year TD"},
+				        {"Visual", 31, "Purchases Quantity", "en-US", "VisualTitle", "Purchase Quantity"},
+				        {"Visual", 32, "Purchases Value", "en-US", "VisualTitle", "Purchase Value"},
+				        {"Visual", 33, "Quantity", "en-US", "MeasureLabel", "Quantity"},
+				        {"Visual", 34, "Received Invoices", "en-US", "VisualTitle", "Invoices Received"},
+				        {"Visual", 35, "SKU Bought", "en-US", "MeasureLabel", "SKUs bought"},
+				        {"Visual", 36, "SKU Dropped", "en-US", "MeasureLabel", "Dropped SKUs"},
+				        {"Visual", 37, "SKU Movement", "en-US", "VisualSubtitle", "Current year vs prior year"},
+				        {"Visual", 37, "SKU Movement", "en-US", "VisualTitle", "SKU movement by brand"},
+				        {"Visual", 38, "SKU New", "en-US", "MeasureLabel", "New SKUs"},
+				        {"Visual", 39, "SKU Value", "en-US", "VisualSubtitle", "By brand"},
+				        {"Visual", 39, "SKU Value", "en-US", "VisualTitle", "Value of new and dropped SKUs"},
+				        {"Visual", 40, "Sales Share", "en-US", "MeasureLabel", "Sales share"},
+				        {"Visual", 41, "Supplier", "en-US", "VisualSubtitle", "By supplier"},
+				        {"Visual", 42, "Supplier Share", "en-US", "VisualTitle", "Supplier Share"},
+				        {"Visual", 43, "Value", "en-US", "MeasureLabel", "Value"}
+				        }
+				    ),
+				    // The refresh fails on a duplicate key; wrong text under a valid key is for review to catch.
+				    Guard =
+				        if Table.RowCount(Table.Distinct(Source, {"OwnerType", "OwnerNumber", "LabelType", "Culture"})) = Table.RowCount(Source)
+				        then Source
+				        else error "Labels: duplicate OwnerType + OwnerNumber + LabelType + Culture"
+				in
+				    Guard
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

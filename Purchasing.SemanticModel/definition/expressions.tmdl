@@ -1,0 +1,11 @@
+expression pServer = "YOUR-SQL-SERVER" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: a50ffeb2-7ff0-46ef-a42f-9966479f72fc
+	queryGroup: Parameters
+
+	annotation PBI_ResultType = Text
+
+expression pDatabase = "YOUR-DATABASE" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: a7a493dc-50a9-4f6d-9539-37dbc3bb136c
+	queryGroup: Parameters
+
+	annotation PBI_ResultType = Text

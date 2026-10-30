@@ -1,0 +1,379 @@
+/// One text measure per UI label of the report, each a LabelText lookup against Labels in the viewer's culture.
+table LabelMeasures
+	lineageTag: ef1d2b07-ea03-483b-b40c-f8fb347d0316
+
+	/// The culture every label is read in. The report is English only, so this is en-US; to add a language, add its rows to Labels and return the viewer's culture here.
+	measure 'User Culture' = "en-US"
+		displayFolder: Culture
+		lineageTag: efc17c05-c626-4aed-8f91-ec1dd4dab7b8
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Page tab: Labels row Page 1, Navigator Title, in the viewer's culture.
+	measure 'PageNav1 | Title' = LabelText( "Navigator Title", "Page", 1 )
+		displayFolder: Titles\Page
+		lineageTag: 84bd3ce7-731f-4989-8636-d93b63f2d4a2
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Page subtitle: Labels row Page 1, Subtitle, in the viewer's culture.
+	measure 'Page 1 | Subtitle' = LabelText( "Subtitle", "Page", 1 )
+		displayFolder: Subtitles\Page
+		lineageTag: 2fc4caf3-1cc6-4ca7-8d00-17fdefe20620
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Page title: Labels row Page 1, Title, in the viewer's culture.
+	measure 'Page 1 | Title' = LabelText( "Title", "Page", 1 )
+		displayFolder: Titles\Page
+		lineageTag: 402654c8-234d-44e0-9245-e498052ca715
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Page tab: Labels row Page 2, Navigator Title, in the viewer's culture.
+	measure 'PageNav2 | Title' = LabelText( "Navigator Title", "Page", 2 )
+		displayFolder: Titles\Page
+		lineageTag: 4cd03f70-6050-4d69-ba30-2222b9643825
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Page subtitle: Labels row Page 2, Subtitle, in the viewer's culture.
+	measure 'Page 2 | Subtitle' = LabelText( "Subtitle", "Page", 2 )
+		displayFolder: Subtitles\Page
+		lineageTag: 48064c0b-cfd4-409d-a66a-0ccd99e63cc2
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Page title: Labels row Page 2, Title, in the viewer's culture.
+	measure 'Page 2 | Title' = LabelText( "Title", "Page", 2 )
+		displayFolder: Titles\Page
+		lineageTag: 0536de5c-b09e-496e-94ab-b809aa8e2e47
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Page tab: Labels row Page 3, Navigator Title, in the viewer's culture.
+	measure 'PageNav3 | Title' = LabelText( "Navigator Title", "Page", 3 )
+		displayFolder: Titles\Page
+		lineageTag: 80216a42-3fce-4f60-bb8f-637f45518a95
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Page subtitle: Labels row Page 3, Subtitle, in the viewer's culture.
+	measure 'Page 3 | Subtitle' = LabelText( "Subtitle", "Page", 3 )
+		displayFolder: Subtitles\Page
+		lineageTag: 31846902-6532-4c62-a95e-890c53de86c6
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Page title: Labels row Page 3, Title, in the viewer's culture.
+	measure 'Page 3 | Title' = LabelText( "Title", "Page", 3 )
+		displayFolder: Titles\Page
+		lineageTag: fe24ef14-23d8-4b8e-b930-f6f740d050a6
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Slicer title: Labels row Slicer 5, SlicerTitle, in the viewer's culture.
+	measure 'Date | SlicerTitle' = LabelText( "SlicerTitle", "Slicer", 5 )
+		displayFolder: Titles\Slicer
+		lineageTag: 562a3dfe-4a5d-40a8-a166-3612d9f17353
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Slicer title: Labels row Slicer 6, SlicerTitle, in the viewer's culture.
+	measure 'Division/Product | SlicerTitle' = LabelText( "SlicerTitle", "Slicer", 6 )
+		displayFolder: Titles\Slicer
+		lineageTag: 47fa9f04-634d-4a7c-9ee3-89a20ba0d5c3
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Slicer title: Labels row Slicer 7, SlicerTitle, in the viewer's culture.
+	measure 'Invoice Number | SlicerTitle' = LabelText( "SlicerTitle", "Slicer", 7 )
+		displayFolder: Titles\Slicer
+		lineageTag: f64712a4-7002-4bdb-b1b6-927ee4423a97
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Slicer title: Labels row Slicer 8, SlicerTitle, in the viewer's culture.
+	measure 'Organisation/Warehouse | SlicerTitle' = LabelText( "SlicerTitle", "Slicer", 8 )
+		displayFolder: Titles\Slicer
+		lineageTag: 3a8c6efe-f4f3-462e-93da-78fb96c27c57
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Slicer title: Labels row Slicer 9, SlicerTitle, in the viewer's culture.
+	measure 'Supplier | SlicerTitle' = LabelText( "SlicerTitle", "Slicer", 9 )
+		displayFolder: Titles\Slicer
+		lineageTag: 4c366114-1686-4680-8b5c-2e085e48fcbd
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 10, VisualSubtitle, in the viewer's culture.
+	measure 'Alt Assortment Cards | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 10 )
+		displayFolder: Subtitles\Visual
+		lineageTag: 00cbaacb-cef2-47be-a4a8-46c0c7528b7a
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 11, VisualSubtitle, in the viewer's culture.
+	measure 'Alt Assortment SKU Movement | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 11 )
+		displayFolder: Subtitles\Visual
+		lineageTag: e041443f-876b-462a-ba5e-b2f8367b45a1
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 12, VisualSubtitle, in the viewer's culture.
+	measure 'Alt Assortment SKU Value | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 12 )
+		displayFolder: Subtitles\Visual
+		lineageTag: ec4e24ec-733b-4ba7-8747-ee93b0683ad9
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 13, VisualSubtitle, in the viewer's culture.
+	measure 'Alt Purchase Purchase Quantity | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 13 )
+		displayFolder: Subtitles\Visual
+		lineageTag: 0865a115-5165-44db-adeb-571c20685cd7
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 14, VisualSubtitle, in the viewer's culture.
+	measure 'Alt Purchase Purchase Value | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 14 )
+		displayFolder: Subtitles\Visual
+		lineageTag: a56ebed0-d107-46ec-aab9-6a153816aa53
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 15, VisualSubtitle, in the viewer's culture.
+	measure 'Alt Purchase Purchase Value Column and line chart | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 15 )
+		displayFolder: Subtitles\Visual
+		lineageTag: 968c6684-0a8e-4001-b2b6-2d2fe352ace4
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 16, VisualSubtitle, in the viewer's culture.
+	measure 'Alt Purchase Supplier Share | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 16 )
+		displayFolder: Subtitles\Visual
+		lineageTag: a235c9ef-5774-42d3-961a-b4d7adfd577e
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 17, VisualSubtitle, in the viewer's culture.
+	measure 'Alt Supply Cards | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 17 )
+		displayFolder: Subtitles\Visual
+		lineageTag: 86279188-18ce-4f64-902d-2a2861634566
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 18, VisualSubtitle, in the viewer's culture.
+	measure 'Alt Supply Invoices Received | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 18 )
+		displayFolder: Subtitles\Visual
+		lineageTag: a3f9add7-132d-4fe2-b13d-8acbb52b4fd9
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 19, VisualSubtitle, in the viewer's culture.
+	measure 'Alt Supply Invoices by Month | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 19 )
+		displayFolder: Subtitles\Visual
+		lineageTag: 1d4576e6-0998-4b52-9b0e-da6898addc17
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 20, VisualSubtitle, in the viewer's culture.
+	measure 'Alt Supply Quantity by Month | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 20 )
+		displayFolder: Subtitles\Visual
+		lineageTag: 19ee5bce-1ec5-48d8-aace-34c687959989
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 21, VisualSubtitle, in the viewer's culture.
+	measure 'Alt Supply Value by Month | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 21 )
+		displayFolder: Subtitles\Visual
+		lineageTag: d11262fe-396e-475b-bdc8-8145c2764ba5
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Caption under a value: Labels row Visual 22, MeasureLabel, in the viewer's culture.
+	measure 'Average per SKU | MeasureLabel' = LabelText( "MeasureLabel", "Visual", 22 )
+		displayFolder: Labels\Visual
+		lineageTag: 27d795b0-9afa-44e4-b604-aea98589eef0
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 23, VisualSubtitle, in the viewer's culture.
+	measure 'Brand Product Quantity | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 23 )
+		displayFolder: Subtitles\Visual
+		lineageTag: 92ef2722-3b6f-4e5a-856b-cd7ecee934bc
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 24, VisualSubtitle, in the viewer's culture.
+	measure 'Brand Product Value | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 24 )
+		displayFolder: Subtitles\Visual
+		lineageTag: 094a8cda-9308-4eb4-b9c6-75378ca938fb
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Caption under a value: Labels row Visual 25, MeasureLabel, in the viewer's culture.
+	measure 'Index | MeasureLabel' = LabelText( "MeasureLabel", "Visual", 25 )
+		displayFolder: Labels\Visual
+		lineageTag: 9db95638-13f6-4b42-9c15-d5947bb132a6
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 26, VisualSubtitle, in the viewer's culture.
+	measure 'Invoice Detail | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 26 )
+		displayFolder: Subtitles\Visual
+		lineageTag: 50971f51-0377-4e63-906f-f5b4ce6fa9bc
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Caption under a value: Labels row Visual 27, MeasureLabel, in the viewer's culture.
+	measure 'Invoices Count | MeasureLabel' = LabelText( "MeasureLabel", "Visual", 27 )
+		displayFolder: Labels\Visual
+		lineageTag: bc0afc9f-109b-4730-b974-6adf34a1f700
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Caption under a value: Labels row Visual 28, MeasureLabel, in the viewer's culture.
+	measure 'Monthly Average | MeasureLabel' = LabelText( "MeasureLabel", "Visual", 28 )
+		displayFolder: Labels\Visual
+		lineageTag: 0970b1c9-b9f0-403b-bbbf-755409483964
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Caption under a value: Labels row Visual 29, MeasureLabel, in the viewer's culture.
+	measure 'Net Change | MeasureLabel' = LabelText( "MeasureLabel", "Visual", 29 )
+		displayFolder: Labels\Visual
+		lineageTag: ee23560a-90c6-4d1a-9841-54ca508f652c
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Caption under a value: Labels row Visual 30, MeasureLabel, in the viewer's culture.
+	measure 'Prior Year To Date | MeasureLabel' = LabelText( "MeasureLabel", "Visual", 30 )
+		displayFolder: Labels\Visual
+		lineageTag: 9064af30-5720-4115-b973-8cec181b6e0f
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual title: Labels row Visual 31, VisualTitle, in the viewer's culture.
+	measure 'Purchases Quantity | VisualTitle' = LabelText( "VisualTitle", "Visual", 31 )
+		displayFolder: Titles\Visual
+		lineageTag: 2424b6e3-80da-4952-9d0d-c3245d904f44
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual title: Labels row Visual 32, VisualTitle, in the viewer's culture.
+	measure 'Purchases Value | VisualTitle' = LabelText( "VisualTitle", "Visual", 32 )
+		displayFolder: Titles\Visual
+		lineageTag: a11f9708-9b0e-43af-9e06-1848520a3540
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Caption under a value: Labels row Visual 33, MeasureLabel, in the viewer's culture.
+	measure 'Quantity | MeasureLabel' = LabelText( "MeasureLabel", "Visual", 33 )
+		displayFolder: Labels\Visual
+		lineageTag: ac3adf7a-f9fd-496c-9692-d4b9037e7596
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual title: Labels row Visual 34, VisualTitle, in the viewer's culture.
+	measure 'Received Invoices | VisualTitle' = LabelText( "VisualTitle", "Visual", 34 )
+		displayFolder: Titles\Visual
+		lineageTag: 2a9d5c4a-c42e-4533-b4ca-c20022408c1e
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Caption under a value: Labels row Visual 35, MeasureLabel, in the viewer's culture.
+	measure 'SKU Bought | MeasureLabel' = LabelText( "MeasureLabel", "Visual", 35 )
+		displayFolder: Labels\Visual
+		lineageTag: 98ed6253-73cf-4ab4-b051-8656a6200749
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Caption under a value: Labels row Visual 36, MeasureLabel, in the viewer's culture.
+	measure 'SKU Dropped | MeasureLabel' = LabelText( "MeasureLabel", "Visual", 36 )
+		displayFolder: Labels\Visual
+		lineageTag: b75119da-2693-4356-9795-674dd3d6b6e0
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 37, VisualSubtitle, in the viewer's culture.
+	measure 'SKU Movement | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 37 )
+		displayFolder: Subtitles\Visual
+		lineageTag: 6e6a231a-430c-494f-8966-03c2e399dc96
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual title: Labels row Visual 37, VisualTitle, in the viewer's culture.
+	measure 'SKU Movement | VisualTitle' = LabelText( "VisualTitle", "Visual", 37 )
+		displayFolder: Titles\Visual
+		lineageTag: 0f960adf-5d14-4b03-8137-80a92be1fb7c
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Caption under a value: Labels row Visual 38, MeasureLabel, in the viewer's culture.
+	measure 'SKU New | MeasureLabel' = LabelText( "MeasureLabel", "Visual", 38 )
+		displayFolder: Labels\Visual
+		lineageTag: d796ccb6-a700-4dad-a649-8abf67cbddbd
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 39, VisualSubtitle, in the viewer's culture.
+	measure 'SKU Value | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 39 )
+		displayFolder: Subtitles\Visual
+		lineageTag: f1bd07d0-bdd1-4569-8df2-342464d9f5be
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual title: Labels row Visual 39, VisualTitle, in the viewer's culture.
+	measure 'SKU Value | VisualTitle' = LabelText( "VisualTitle", "Visual", 39 )
+		displayFolder: Titles\Visual
+		lineageTag: b524c27c-1ef3-490c-8f02-6330e16e17bd
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Caption under a value: Labels row Visual 40, MeasureLabel, in the viewer's culture.
+	measure 'Sales Share | MeasureLabel' = LabelText( "MeasureLabel", "Visual", 40 )
+		displayFolder: Labels\Visual
+		lineageTag: 934a558a-b58e-4f85-a36a-67cc6d296c64
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual subtitle: Labels row Visual 41, VisualSubtitle, in the viewer's culture.
+	measure 'Supplier | VisualSubtitle' = LabelText( "VisualSubtitle", "Visual", 41 )
+		displayFolder: Subtitles\Visual
+		lineageTag: 15da27da-cf88-4371-8053-65cd9eec1538
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Visual title: Labels row Visual 42, VisualTitle, in the viewer's culture.
+	measure 'Supplier Share | VisualTitle' = LabelText( "VisualTitle", "Visual", 42 )
+		displayFolder: Titles\Visual
+		lineageTag: f98ef687-84dc-4c21-93a4-169620ff9085
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	/// Caption under a value: Labels row Visual 43, MeasureLabel, in the viewer's culture.
+	measure 'Value | MeasureLabel' = LabelText( "MeasureLabel", "Visual", 43 )
+		displayFolder: Labels\Visual
+		lineageTag: e91ecdae-4fee-4d03-93b1-d0aecbad6b79
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	partition LabelMeasures = m
+		mode: import
+		queryGroup: Model
+		source =
+				let
+				    // Query group: Model
+				    // Generic measure-table scaffold - an empty table that hosts measures
+				    // only. Zero columns by design: with no visible columns and at least
+				    // one measure, Power BI shows the calculator icon and pins the table
+				    // to the top of the Fields pane.
+				    Source = #table({}, {})
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+
